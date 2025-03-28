@@ -75,10 +75,15 @@ export default function Home() {
   const [matchedData, setMatchedData] = useState<MatchedData | null>(null);
   const [approvedMatches, setApprovedMatches] = useState<ApprovedMatches>({});
 
-  const handleApproval = (orderId: string, approved: boolean) => {
+  const handleApproval = (orderId: string, transaction:any, approved: boolean) => {
     const updatedApprovals = { ...approvedMatches, [orderId]: approved };
     setApprovedMatches(updatedApprovals);
-    // TODO: Implement API call to update and store the status in the backend.
+    const transactionKey = `${transaction.customer}-${transaction.orderId}-${transaction.txnAmount}`;
+    axios.post("http://localhost:5000/approve", { orderId, transactionKey, isApproved: approved })
+      .then(() => {
+        alert(`✅ Saved as ${approved ? "Approved" : "Rejected"}`);
+      })
+      .catch((error) => console.error("Error saving approval:", error));
   };
 
   const handleMatch = async () => {
@@ -151,12 +156,12 @@ export default function Home() {
                   ) : (
                     <div className="flex gap-3">
                       <button
-                        onClick={() => handleApproval(match.order.orderId, true)}
+                        onClick={() => handleApproval(match.order.orderId, match.transactions[match.transactions.length -1], true)}
                         className="bg-green-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-green-700 transition-all duration-200 flex items-center gap-1">
                         Approve
                       </button>
                       <button
-                        onClick={() => handleApproval(match.order.orderId, false)}
+                        onClick={() => handleApproval(match.order.orderId, match.transactions[match.transactions.length -1], false)}
                         className="bg-red-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-red-700 transition-all duration-200 flex items-center gap-1">
                         Reject
                       </button>
