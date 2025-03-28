@@ -85,3 +85,22 @@ Alternatively, you can paste any custom JSON into the text area and click the **
 - Users can **approve** or **deny** the match.  
 - **Note:** The approve/deny actions are currently UI-based and do not trigger any API requests.
 ![Alt Text](screenshot2.png)
+
+## Sample Data 1
+```bash
+Order JSON
+[{"customer":"Alex Abel","orderId":"18G","date":"2023-07-11","item":"Tool A","price":1.23},{"customer":"Brian Bell","orderId":"20S","date":"2023-08-08","item":"Toy B","price":3.21}]
+
+Transaction JSON
+[{"customer":"Alexis Abe","orderId":"1B6","date":"2023-07-12","item":"Tool A","price":1.23,"txnType":"payment","txnAmount":1.23},{"customer":"Alex Able","orderId":"I8G","date":"2023-07-13","item":"Tool A","price":1.23,"txnType":"refund","txnAmount":-1.23},{"customer":"Alex Able","orderId":"I8G","date":"2023-07-13","item":"Tool A","price":1.23,"txnType":"refund","txnAmount":-1.23},{"customer":"Brian Ball","orderId":"ZOS","date":"2023-08-11","item":"Toy B","price":3.21,"txnType":"payment-1","txnAmount":1.21},{"customer":"Bryan","orderId":"705","date":"2023-08-13","item":"Toy B","price":3.21,"txnType":"payment-2","txnAmount":2}]
+```
+## Sample Data 2
+```bash
+Order Json
+[{"customer": "Alice Adams", "orderId": "99X", "date": "2023-06-15", "item": "Gadget X", "price": 10.50},{"customer": "Bob Baker", "orderId": "45T", "date": "2023-07-20", "item": "Gizmo Y", "price": 5.75},{"customer": "Charlie Chap", "orderId": "77M", "date": "2023-08-05", "item": "Widget Z", "price": 8.99}]
+
+
+Transaction JSON
+[{"customer": "Alicia Adam", "orderId": "9X9", "date": "2023-06-16", "item": "Gadget X", "price": 10.50, "txnType": "payment", "txnAmount": 10.50},{"customer": "Bobbie B.", "orderId": "4T5", "date": "2023-07-19", "item": "Gizmo Y", "price": 5.75, "txnType": "refund", "txnAmount": -5.75},{"customer": "Charlie Chap", "orderId": "77M", "date": "2023-08-05", "item": "Widget Z", "price": 8.99, "txnType": "payment", "txnAmount": 8.99},{"customer": "Chris Chapman", "orderId": "770M", "date": "2023-08-07", "item": "Widget Z", "price": 8.99, "txnType": "refund", "txnAmount": -8.99},{"customer": "Alice Adams", "orderId": "99X", "date": "2023-06-15", "item": "Gadget X", "price": 10.50, "txnType": "payment", "txnAmount": 10.50}]
+
+```
