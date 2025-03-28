@@ -142,7 +142,6 @@ export default function Home() {
                     match.transactions
                       .map((txn: any, idx: string) => (
                         <li key={idx}>
-                          {txn.customer} - {txn.txnType} - ${txn.txnAmount}
                           <strong> (Confidence: {txn.confidence ? txn.confidence : "N/A"}%)</strong>
                         </li>
                       ))
