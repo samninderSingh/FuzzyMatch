@@ -87,7 +87,7 @@ Alternatively, you can paste any custom JSON into the text area and click the **
 ![Alt Text](screenshot2.png)
 
 ## Sample Data 1
-```bash
+```
 Order JSON
 [{"customer":"Alex Abel","orderId":"18G","date":"2023-07-11","item":"Tool A","price":1.23},{"customer":"Brian Bell","orderId":"20S","date":"2023-08-08","item":"Toy B","price":3.21}]
 
@@ -95,7 +95,7 @@ Transaction JSON
 [{"customer":"Alexis Abe","orderId":"1B6","date":"2023-07-12","item":"Tool A","price":1.23,"txnType":"payment","txnAmount":1.23},{"customer":"Alex Able","orderId":"I8G","date":"2023-07-13","item":"Tool A","price":1.23,"txnType":"refund","txnAmount":-1.23},{"customer":"Alex Able","orderId":"I8G","date":"2023-07-13","item":"Tool A","price":1.23,"txnType":"refund","txnAmount":-1.23},{"customer":"Brian Ball","orderId":"ZOS","date":"2023-08-11","item":"Toy B","price":3.21,"txnType":"payment-1","txnAmount":1.21},{"customer":"Bryan","orderId":"705","date":"2023-08-13","item":"Toy B","price":3.21,"txnType":"payment-2","txnAmount":2}]
 ```
 ## Sample Data 2
-```bash
+```
 Order Json
 [{"customer": "Alice Adams", "orderId": "99X", "date": "2023-06-15", "item": "Gadget X", "price": 10.50},{"customer": "Bob Baker", "orderId": "45T", "date": "2023-07-20", "item": "Gizmo Y", "price": 5.75},{"customer": "Charlie Chap", "orderId": "77M", "date": "2023-08-05", "item": "Widget Z", "price": 8.99}]
 
@@ -103,4 +103,51 @@ Order Json
 Transaction JSON
 [{"customer": "Alicia Adam", "orderId": "9X9", "date": "2023-06-16", "item": "Gadget X", "price": 10.50, "txnType": "payment", "txnAmount": 10.50},{"customer": "Bobbie B.", "orderId": "4T5", "date": "2023-07-19", "item": "Gizmo Y", "price": 5.75, "txnType": "refund", "txnAmount": -5.75},{"customer": "Charlie Chap", "orderId": "77M", "date": "2023-08-05", "item": "Widget Z", "price": 8.99, "txnType": "payment", "txnAmount": 8.99},{"customer": "Chris Chapman", "orderId": "770M", "date": "2023-08-07", "item": "Widget Z", "price": 8.99, "txnType": "refund", "txnAmount": -8.99},{"customer": "Alice Adams", "orderId": "99X", "date": "2023-06-15", "item": "Gadget X", "price": 10.50, "txnType": "payment", "txnAmount": 10.50}]
 
+```
+
+## Further Enhancements
+
+### Option 1: Learning from User Decisions to Improve Accuracy
+Currently, when a user approves or rejects a match, that decision isn’t remembered for future transactions. By allowing the system to learn from past approvals and rejections, we can make smarter and more accurate matches over time.
+
+### How It Works
+- Remember User Decisions – Store approvals and rejections in a database or a local file.
+- Adjust Confidence Scores 
+ If a match was previously approved, similar future matches will get a higher confidence score.
+ If a match was previously rejected, similar future matches will be less likely to be suggested.
+- Predict Better Matches – Over time, the system will recognize patterns in user behavior and make smarter recommendations automatically.
+
+
+
+### Option 2: Scaling to Handle 100K–1M Orders
+
+Note: I haven't implemented Option 2 yet, but here are my suggestions for improvements.
+Our current system is designed for small datasets. If we scale to 100K–1M orders, we need to optimize performance.
+
+1. Move to a Database (PostgreSQL/MongoDB)
+2. Optimize Matching Algorithm: we'll use indexes and batch processing.
+```
+const matchOrdersWithTransactions = async (orders) => {
+  const batchSize = 1000;
+  const results = [];
+
+  for (let i = 0; i < orders.length; i += batchSize) {
+    const batchOrders = orders.slice(i, i + batchSize);
+    const batchResults = await matchBatch(batchOrders);
+    results.push(...batchResults);
+  }
+
+  return results;
+};
+```
+       
+
+3. Use Fuzzy Matching Efficiently: Instead of searching all transactions, use pre-filtering:
+```
+const getPotentialMatches = async (customerName) => {
+  return db.query(`
+    SELECT * FROM transactions
+    WHERE customer_name % $1 LIMIT 50
+  `, [customerName]);
+};
 ```
